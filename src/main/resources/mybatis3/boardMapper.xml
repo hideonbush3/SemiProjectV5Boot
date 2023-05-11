@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board">
+    <select id="selectBoard" statementType="PREPARED"
+            parameterType="int"
+            resultType="hideonbush.springboot.semiproject5v.model.Board">
+        select bno, title, userid, thumbs, views, regdate from board
+        order by bno desc limit #{stbno}, 25
+    </select>
+
+    <!-- 동적 질의문으로 검색기능 구현 -->
+    <!-- 단, 컬럼명이나 테이블명에는 #{}가 아닌 ${}를 사용! -->
+    <select id="selectFindBoard" statementType="PREPARED" parameterType="map"
+            resultType="hideonbush.springboot.semiproject5v.model.Board">
+        select bno, title, userid, thumbs, views, regdate from board
+
+        <if test="ftype != 'titcont'">
+            where ${ftype} like concat('%', #{fkey}, '%')</if>
+
+        <if test="ftype == 'titcont'">
+            where title like concat('%', #{fkey}, '%') or
+            content like concat('%', #{fkey}, '%')</if>
+
+        order by bno desc limit #{stbno}, 25
+    </select>
+
+    <select id="countBoard" statementType="PREPARED" resultType="int">
+        select ceil(count(bno)/25) cnt from board
+    </select>
+
+    <select id="countFindBoard" statementType="PREPARED"
+            parameterType="map" resultType="int">
+        select ceil(count(bno)/25) cnt from board
+
+        <if test="ftype != 'titcont'">
+            where ${ftype} like concat('%', #{fkey}, '%')</if>
+
+        <if test="ftype == 'titcont'">
+            where title like concat('%', #{fkey}, '%') or
+            content like concat('%', #{fkey}, '%')</if>
+    </select>
+
+    <select id="selectOneBoard" statementType="PREPARED" parameterType="String" resultType="hideonbush.springboot.semiproject5v.model.Board">
+        select * from board where bno = #{bno}
+    </select>
+
+    <insert id="insertBoard" statementType="PREPARED"
+            parameterType="hideonbush.springboot.semiproject5v.model.Board">
+        insert into board (title, userid, content) values (#{title}, #{userid}, #{content});
+    </insert>
+
+    <update id="countViewBoard" statementType="PREPARED" parameterType="String">
+        update board set views = views + 1 where bno = #{bno}
+    </update>
+
+</mapper>
