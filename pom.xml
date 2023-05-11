@@ -43,7 +43,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- tiles -->
+        <!-- tiles3 -->
         <dependency>
             <groupId>org.apache.tiles</groupId>
             <artifactId>tiles-servlet</artifactId>
