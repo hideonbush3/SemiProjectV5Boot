@@ -25,6 +25,7 @@ public class BoardDAOImpl implements BoardDAO {
 
     @Override
     public int countBoard() {
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" +  sqlSession.selectOne("board.countBoard"));
         return sqlSession.selectOne("board.countBoard");
     }
 
